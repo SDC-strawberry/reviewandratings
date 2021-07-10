@@ -1,0 +1,27 @@
+{
+  "name": "reviewandratings",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "server": "npx nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SDC-strawberry/reviewandratings.git"
+  },
+  "author": "Chris Floyd",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SDC-strawberry/reviewandratings/issues"
+  },
+  "homepage": "https://github.com/SDC-strawberry/reviewandratings#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6"
+  }
+}
