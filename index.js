@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
 
 app.get('/users', db.getUsers)
 
+
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)
 });
