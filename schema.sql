@@ -29,7 +29,7 @@ CREATE TABLE reviews (
   reviewer_email VARCHAR NULL DEFAULT NULL,
   response VARCHAR NULL DEFAULT NULL,
   helpfulness INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (id, product_id)
+  PRIMARY KEY (id)
 );
 
 -- ---
@@ -43,7 +43,7 @@ CREATE TABLE reviews_photos (
   id SERIAL,
   review_id INTEGER NULL DEFAULT NULL,
   url VARCHAR NULL DEFAULT NULL,
-  PRIMARY KEY (id, review_id)
+  PRIMARY KEY (id)
 );
 
 -- ---
@@ -58,7 +58,7 @@ CREATE TABLE characteristic_reviews (
   characteristic_id INTEGER NULL DEFAULT NULL,
   review_id INTEGER NULL DEFAULT NULL,
   value INTEGER NULL DEFAULT NULL,
-  PRIMARY KEY (id, characteristic_id, review_id)
+  PRIMARY KEY (id)
 );
 
 -- ---
@@ -72,7 +72,7 @@ CREATE TABLE characteristics (
   id SERIAL UNIQUE,
   product_id INTEGER NULL DEFAULT NULL,
   name VARCHAR NULL DEFAULT NULL,
-  PRIMARY KEY (id, product_id)
+  PRIMARY KEY (id)
 );
 
 -- ---
@@ -101,6 +101,15 @@ ALTER TABLE reviews_photos ADD FOREIGN KEY (review_id) REFERENCES reviews (id);
 ALTER TABLE characteristic_reviews ADD FOREIGN KEY (characteristic_id) REFERENCES characteristics (id);
 ALTER TABLE characteristic_reviews ADD FOREIGN KEY (review_id) REFERENCES reviews (id);
 ALTER TABLE characteristics ADD FOREIGN KEY (product_id) REFERENCES product (id);
+
+-- ---
+-- Indexes
+-- ---
+
+CREATE INDEX photos on reviews_photos(review_id);
+CREATE INDEX chars_id on characteristic_reviews(characteristic_id);
+CREATE INDEX chars_reviews on characteristic_reviews(review_id);
+CREATE INDEX chars_reviews_id on characteristics(product_id);
 
 -- ---
 -- Table Properties

@@ -12,7 +12,17 @@ app.get('/', (req, res) => {
   res.json("hey")
 });
 
-app.get('/users', db.getUsers)
+app.get('/reviews', db.getReviews)
+//need help to better understand paginate - talk with tom
+
+
+app.get('/reviews/meta', db.getMeta)
+
+// app.post('/reviews/post', db.getUsers)
+
+// app.put('/reviews/helpful', db.getUsers)
+
+// app.put('/reviews/report', db.getUsers)
 
 
 
