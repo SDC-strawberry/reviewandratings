@@ -18,9 +18,9 @@ app.get('/reviews/meta', db.getMeta)
 
 app.put('/reviews/helpful', db.helpful)
 
-// app.post('/reviews/post', db.getUsers)
+app.post('/reviews/post', db.postReview)
 
-// app.put('/reviews/report', db.getUsers)
+app.put('/reviews/report', db.report)
 
 
 

@@ -9,10 +9,11 @@ const pool = new Pool ({
   port: process.env.port
 });
 
+//======================================================
 //obtains multiple reviews for a single product
 const getReviews = (req, res) => {
   const getReviews = {
-    text: 'SELECT r.product_id,r.id, r.rating, r.summary, r.recommend, r.response, r.body, r.date, r.reviewer_name, r.helpfulness, p.id, p.url FROM reviews AS r LEFT JOIN reviews_photos AS p ON r.id = p.review_id WHERE r.product_id = $1 ORDER BY r.id ASC LIMIT $2',
+    text: 'SELECT r.product_id,r.id, r.rating, r.summary, r.recommend, r.response, r.body, r.date, r.reviewer_name, r.helpfulness, p.id, p.url FROM reviews AS r LEFT JOIN reviews_photos AS p ON r.id = p.review_id WHERE r.product_id = $1 AND r.reported = false ORDER BY r.id ASC LIMIT $2',
     rowMode: 'array',
     values: [req.query.product_id, req.query.count || 5 ]
   }
@@ -25,6 +26,7 @@ const getReviews = (req, res) => {
     .catch((error) => {throw error});
 }
 
+//======================================================
 //obtains metadata for a single product
 const getMeta = (req, res) => {
   const getMeta = {
@@ -40,6 +42,7 @@ const getMeta = (req, res) => {
     .catch((error) => {throw error});
 }
 
+//======================================================
 //adds a + 1 to a helpfulness score for a single product
 const helpful = (req, res) => {
   const helpful = {
@@ -50,16 +53,48 @@ const helpful = (req, res) => {
   pool
     .query(helpful)
     .then((results) => {
-      res.send(204);
+      res.sendStatus(204);
     })
     .catch((error) => {throw error});
 }
 
+//======================================================
+//flags a review as reported and removes it from returned data for a single product
+const report= (req, res) => {
+  const report = {
+    text: 'UPDATE reviews SET reported = true WHERE reviews.id = $1;',
+    // rowMode: 'array',
+    values: [req.query.review_id]
+  }
+  pool
+    .query(report)
+    .then((results) => {
+      res.sendStatus(204);
+    })
+    .catch((error) => {throw error});
+}
+
+const postReview = (req, res) => {
+  console.log('POST Info: ', req)
+  // const report = {
+  //   text: 'UPDATE reviews SET reported = true WHERE reviews.id = $1;',
+  //   // rowMode: 'array',
+  //   values: [req.query.review_id]
+  // }
+  // pool
+  //   .query(report)
+  //   .then((results) => {
+  //     res.sendStatus(204);
+  //   })
+  //   .catch((error) => {throw error});
+}
 
 module.exports = {
   getReviews,
   getMeta,
-  helpful
+  helpful,
+  report,
+  postReview
 
 }
 

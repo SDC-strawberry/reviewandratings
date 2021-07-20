@@ -1,4 +1,4 @@
-
+//going to have to account for the reviews that show up more than once because there are more than one photo attached
 let returnReviews = (array, product_id, page, count, sort) => {
   let results = {
     product: `${product_id}`,
@@ -8,6 +8,7 @@ let returnReviews = (array, product_id, page, count, sort) => {
   };
 
   array.forEach((item) => {
+    console.log('photo: ', item[10]);
     let reviewObj = {
       review_id: item[1],
       rating: item[2],
@@ -19,7 +20,13 @@ let returnReviews = (array, product_id, page, count, sort) => {
       reviewer_name: item[8],
       helpfulness: item[9],
       photos: []
+    }
 
+    if (item[10]) {
+      reviewObj.photos.push ({
+        id: item[10],
+        url: item[11]
+      })
     }
 
     results.results.push(reviewObj);
