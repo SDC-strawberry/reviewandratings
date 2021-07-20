@@ -82,15 +82,15 @@ CREATE TABLE characteristics (
 
 -- DROP TABLE IF EXISTS product;
 
-CREATE TABLE product (
-  id SERIAL UNIQUE,
-  name VARCHAR,
-  slogan VARCHAR,
-  description VARCHAR,
-  category VARCHAR,
-  default_price INTEGER,
-  PRIMARY KEY (id)
-);
+-- CREATE TABLE product (
+--   id SERIAL UNIQUE,
+--   name VARCHAR,
+--   slogan VARCHAR,
+--   description VARCHAR,
+--   category VARCHAR,
+--   default_price INTEGER,
+--   PRIMARY KEY (id)
+-- );
 
 -- ---
 -- Foreign Keys
@@ -106,6 +106,7 @@ ALTER TABLE characteristics ADD FOREIGN KEY (product_id) REFERENCES product (id)
 -- Indexes
 -- ---
 
+CREATE INDEX review_idx on reviews(product_id);
 CREATE INDEX photos on reviews_photos(review_id);
 CREATE INDEX chars_id on characteristic_reviews(characteristic_id);
 CREATE INDEX chars_reviews on characteristic_reviews(review_id);

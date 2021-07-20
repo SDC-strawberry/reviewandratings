@@ -29,7 +29,6 @@ const getReviews = (req, res) => {
 const getMeta = (req, res) => {
   const getMeta = {
     text: 'SELECT c.id, c.name, cr.value, cr.review_id, r.rating, r.recommend, c.product_id FROM characteristics AS c LEFT JOIN characteristic_reviews AS cr ON c.id = cr.characteristic_id LEFT JOIN reviews AS r ON r.id = cr.review_id WHERE c.product_id = $1',
-    // rowMode: 'array',
     values: [req.query.product_id]
   }
   pool
@@ -41,11 +40,26 @@ const getMeta = (req, res) => {
     .catch((error) => {throw error});
 }
 
+//adds a + 1 to a helpfulness score for a single product
+const helpful = (req, res) => {
+  const helpful = {
+    text: 'UPDATE reviews SET helpfulness = helpfulness + 1 WHERE reviews.id = $1;',
+    // rowMode: 'array',
+    values: [req.query.review_id]
+  }
+  pool
+    .query(helpful)
+    .then((results) => {
+      res.send(204);
+    })
+    .catch((error) => {throw error});
+}
 
 
 module.exports = {
   getReviews,
-  getMeta
+  getMeta,
+  helpful
 
 }
 
