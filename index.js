@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 app.get('/', (req, res) => {
-  res.json("hey")
+  res.send('connected')
 });
 
 app.get('/reviews', db.getReviews)

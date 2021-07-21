@@ -74,6 +74,8 @@ const report= (req, res) => {
     .catch((error) => {throw error});
 }
 
+//======================================================
+//saves a review for a single product
 const postReview = (req, res) => {
   console.log('POST Info: ', req)
   // const report = {
