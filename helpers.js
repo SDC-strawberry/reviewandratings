@@ -8,7 +8,9 @@ let returnReviews = (array, product_id, page, count, sort) => {
   };
 
   array.forEach((item) => {
-    console.log('photo: ', item[10]);
+    //I need to check if the review is already there & if there are photos
+      //if there then I should just push the photos to
+    // console.log('results_Id: ', results['results'][4]);
     let reviewObj = {
       review_id: item[1],
       rating: item[2],
@@ -29,8 +31,22 @@ let returnReviews = (array, product_id, page, count, sort) => {
       })
     }
 
-    results.results.push(reviewObj);
+
     // console.log('inside the helper',item[1]);
+    for (let i = 0; i < results.results.length; i++) {
+      let resultsId = results['results']
+      if (resultsId[i].review_id === item[1]) {
+        if (item[10]) {
+          resultsId[i].photos.push ({
+            id: item[10],
+            url: item[11]
+          })
+          return
+        }
+      }
+    }
+    results.results.push(reviewObj);
+
 
   });
   return results;
@@ -42,8 +58,8 @@ let returnMeta = (metaObj, product_id) => {
     product_id: product_id,
     ratings: {},
     recommend: {
-      false: 0,
-      true: 0
+      false: '',
+      true: ''
     },
     characteristics: {}
   }
@@ -51,9 +67,9 @@ let returnMeta = (metaObj, product_id) => {
   metaObj.forEach((item) => {
     //for the ratings section
     if (!results.ratings[item.rating]) {
-      results.ratings[item.rating] = '1';
+      results.ratings[item.rating] = "1";
     } else {
-      results.ratings[item.rating]++
+      results.ratings[item.rating]++;
     }
 
     //for the recommend section
@@ -80,10 +96,16 @@ let returnMeta = (metaObj, product_id) => {
   });
 
   for (let key in results.characteristics) {
-    results.characteristics[key].value = results.characteristics[key].value/results.characteristics[key].avg;
+    results.characteristics[key].value = (results.characteristics[key].value/results.characteristics[key].avg).toString();
     delete results.characteristics[key].avg;
   }
+  for (let key in results.ratings) {
+    results.ratings[key] = results.ratings[key].toString();
+  }
 
+  for (let key in results.recommend) {
+    results.recommend[key] = results.recommend[key].toString();
+  }
   return results;
 
 };
