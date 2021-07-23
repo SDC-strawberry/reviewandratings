@@ -12,6 +12,7 @@ const pool = new Pool ({
 //======================================================
 //obtains multiple reviews for a single product
 const getReviews = (req, res) => {
+  console.log('Should be the request: ',req.data)
   const getReviews = {
     text: 'SELECT r.product_id,r.id, r.rating, r.summary, r.recommend, r.response, r.body, r.date, r.reviewer_name, r.helpfulness, p.id, p.url FROM reviews AS r LEFT JOIN reviews_photos AS p ON r.id = p.review_id WHERE r.product_id = $1 AND r.reported = false ORDER BY r.id ASC LIMIT $2',
     rowMode: 'array',
