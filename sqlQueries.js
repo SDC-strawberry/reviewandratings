@@ -17,6 +17,10 @@ const getReviews = (req, res) => {
     rowMode: 'array',
     values: [req.query.product_id, req.query.count || 5 ]
   }
+  if (!req.query.product_id) {
+    res.send("Error: invalid product_id provided");
+    return;
+  }
   pool
     .query(getReviews)
     .then((results) => {
@@ -33,9 +37,14 @@ const getMeta = (req, res) => {
     text: 'SELECT c.id, c.name, cr.value, cr.review_id, r.rating, r.recommend, c.product_id FROM characteristics AS c LEFT JOIN characteristic_reviews AS cr ON c.id = cr.characteristic_id LEFT JOIN reviews AS r ON r.id = cr.review_id WHERE c.product_id = $1',
     values: [req.query.product_id]
   }
+  if (!req.query.product_id) {
+    res.send("Error: invalid product_id provided");
+    return;
+  }
   pool
     .query(getMeta)
     .then((results) => {
+      console.log('results: ', results.rows);
       let formatted = help.returnMeta(results.rows, req.query.product_id)
       res.send(formatted);
     })

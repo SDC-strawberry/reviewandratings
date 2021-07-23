@@ -1,11 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1626916317645" clover="3.2.0">
-  <project timestamp="1626916317646" name="All files">
-    <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1" elements="3" coveredelements="3" complexity="0" loc="2" ncloc="2" packages="1" files="1" classes="1"/>
-    <file name="sum.js" path="/Users/chrisfloyd/Sprints/SDC/reviewandratings/tests/sum.js">
-      <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-      <line num="2" count="1" type="stmt"/>
-      <line num="4" count="1" type="stmt"/>
-    </file>
+<coverage generated="1627004897530" clover="3.2.0">
+  <project timestamp="1627004897531" name="All files">
+    <metrics statements="45" coveredstatements="45" conditionals="16" coveredconditionals="13" methods="5" coveredmethods="5" elements="66" coveredelements="63" complexity="0" loc="45" ncloc="45" packages="2" files="3" classes="3"/>
+    <package name="reviewandratings">
+      <metrics statements="38" coveredstatements="38" conditionals="16" coveredconditionals="13" methods="4" coveredmethods="4"/>
+      <file name="helpers.js" path="/Users/chrisfloyd/Sprints/SDC/reviewandratings/helpers.js">
+        <metrics statements="38" coveredstatements="38" conditionals="16" coveredconditionals="13" methods="4" coveredmethods="4"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="27" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="3" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="39" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
+        <line num="48" count="3" type="stmt"/>
+        <line num="52" count="4" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="57" count="1" type="stmt"/>
+        <line num="67" count="1" type="stmt"/>
+        <line num="69" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="70" count="2" type="stmt"/>
+        <line num="72" count="6" type="stmt"/>
+        <line num="76" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="77" count="4" type="stmt"/>
+        <line num="79" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="80" count="4" type="stmt"/>
+        <line num="84" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="85" count="4" type="stmt"/>
+        <line num="92" count="8" type="cond" truecount="1" falsecount="1"/>
+        <line num="93" count="8" type="stmt"/>
+        <line num="94" count="8" type="stmt"/>
+        <line num="98" count="1" type="stmt"/>
+        <line num="99" count="4" type="stmt"/>
+        <line num="100" count="4" type="stmt"/>
+        <line num="102" count="1" type="stmt"/>
+        <line num="103" count="2" type="stmt"/>
+        <line num="106" count="1" type="stmt"/>
+        <line num="107" count="2" type="stmt"/>
+        <line num="109" count="1" type="stmt"/>
+        <line num="117" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="reviewandratings.tests">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <file name="apiMockData.js" path="/Users/chrisfloyd/Sprints/SDC/reviewandratings/tests/apiMockData.js">
+        <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+      </file>
+      <file name="sum.js" path="/Users/chrisfloyd/Sprints/SDC/reviewandratings/tests/sum.js">
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+      </file>
+    </package>
   </project>
 </coverage>
