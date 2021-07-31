@@ -12,10 +12,15 @@ const pool = new Pool ({
 //======================================================
 //obtains multiple reviews for a single product
 const getReviews = (req, res) => {
+
   const getReviews = {
     text: 'SELECT r.product_id,r.id, r.rating, r.summary, r.recommend, r.response, r.body, r.date, r.reviewer_name, r.helpfulness, p.id, p.url FROM reviews AS r LEFT JOIN reviews_photos AS p ON r.id = p.review_id WHERE r.product_id = $1 AND r.reported = false ORDER BY r.id ASC LIMIT $2',
     rowMode: 'array',
     values: [req.query.product_id, req.query.count || 5 ]
+  }
+  if (!req.query.product_id) {
+    res.send("Error: invalid product_id provided");
+    return;
   }
   pool
     .query(getReviews)
@@ -33,9 +38,14 @@ const getMeta = (req, res) => {
     text: 'SELECT c.id, c.name, cr.value, cr.review_id, r.rating, r.recommend, c.product_id FROM characteristics AS c LEFT JOIN characteristic_reviews AS cr ON c.id = cr.characteristic_id LEFT JOIN reviews AS r ON r.id = cr.review_id WHERE c.product_id = $1',
     values: [req.query.product_id]
   }
+  if (!req.query.product_id) {
+    res.send("Error: invalid product_id provided");
+    return;
+  }
   pool
     .query(getMeta)
     .then((results) => {
+      console.log('results: ', results.rows);
       let formatted = help.returnMeta(results.rows, req.query.product_id)
       res.send(formatted);
     })
@@ -77,18 +87,26 @@ const report= (req, res) => {
 //======================================================
 //saves a review for a single product
 const postReview = (req, res) => {
-  console.log('POST Info: ', req)
-  // const report = {
-  //   text: 'UPDATE reviews SET reported = true WHERE reviews.id = $1;',
-  //   // rowMode: 'array',
-  //   values: [req.query.review_id]
-  // }
-  // pool
-  //   .query(report)
-  //   .then((results) => {
-  //     res.sendStatus(204);
-  //   })
-  //   .catch((error) => {throw error});
+  (async () => {
+    const client = await pool.connect()
+
+    try {
+      await client.query('BEGIN')
+      const queryText = 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id'
+      const queryValues = [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email]
+      const res = await client.query(queryText, queryValues)
+
+      const insertPhotoText = 'INSERT INTO reviews_photos (review_id, url) VALUES ($1, $2)'
+      const insertPhotoValue = [res.rows[0].id, req.body.photos]
+      await client.query(insertPhotoText, insertPhotoValue)
+      await client.query('COMMIT')
+    } catch (e) {
+      await client.query('ROLLBACK')
+      throw e
+    } finally {
+      client.release()
+    }
+  })().catch((e) => console.error(e.stack))
 }
 
 module.exports = {
@@ -114,3 +132,18 @@ module.exports = {
 //     .then((results) => {res.status(200).json(results.rows)})
 //     .catch((error) => {throw error});
 // }
+  // console.log('POST Info: ', req.body)
+  // const newReview = {
+  //   text: 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness)VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id',
+  //   // rowMode: 'array',
+  //   values: [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email ]
+  // }
+
+  // pool
+  //   .query(newReview)
+  //   .then((results) => {
+  //     review_id = results.rows[0];
+  //     //do a for loop with the query inside?
+  //   })
+  //   .query(test)
+  //   .catch((error) => {throw error});
