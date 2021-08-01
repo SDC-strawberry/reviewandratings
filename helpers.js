@@ -8,9 +8,7 @@ let returnReviews = (array, product_id, page, count, sort) => {
   };
 
   array.forEach((item) => {
-    //I need to check if the review is already there & if there are photos
-      //if there then I should just push the photos to
-    // console.log('results_Id: ', results['results'][4]);
+
     let reviewObj = {
       review_id: item[1],
       rating: item[2],
@@ -31,8 +29,6 @@ let returnReviews = (array, product_id, page, count, sort) => {
       })
     }
 
-
-    // console.log('inside the helper',item[1]);
     for (let i = 0; i < results.results.length; i++) {
       let resultsId = results['results']
       if (resultsId[i].review_id === item[1]) {
@@ -65,14 +61,14 @@ let returnMeta = (metaObj, product_id) => {
   }
 
   metaObj.forEach((item) => {
-    //for the ratings section
+    //==========for the ratings section
     if (!results.ratings[item.rating]) {
       results.ratings[item.rating] = "1";
     } else {
       results.ratings[item.rating]++;
     }
 
-    //for the recommend section
+    //==========for the recommend section
     if (item.recommend === false) {
       results.recommend.false++
     }
@@ -80,7 +76,7 @@ let returnMeta = (metaObj, product_id) => {
       results.recommend.true++
     }
 
-    //for the characteristics section
+    //==========for the characteristics section
     if (!results.characteristics[item.name]) {
       results.characteristics[item.name] = {
         id: item.id,
@@ -109,23 +105,6 @@ let returnMeta = (metaObj, product_id) => {
   return results;
 
 };
-
-
-// let updatePhotos = (review_id, urlsArray) => {
-
-//   let insertPhotoValue = '';
-
-//   urlsArray.forEach((item) => {
-//     insertPhotoValue += `(${review_id}, '${item}'),`;
-//   });
-
-//   // insertPhotoValue = insertPhotoValue.slice(0, 2);
-//   console.log('inside the helper: ', insertPhotoValue);
-
-//   let insertPhotoText = `INSERT INTO reviews_photos (review_id, url) VALUES ${insertPhotoValue}`
-//   return insertPhotoText;
-
-// };
 
 
 module.exports = {

@@ -92,7 +92,7 @@ const postReview = (req, res) => {
   const newReview = {
     text: 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness)VALUES ($1, $2, $3, $4, $5, $6, false, $7, $8, null, 0 ) RETURNING id',
     // rowMode: 'array',
-    values: [req.body.product_id, req.body.ratings, date, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email ]
+    values: [req.body.product_id, req.body.ratings, date, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email]
   }
   pool
     .query(newReview)
@@ -109,13 +109,11 @@ const postReview = (req, res) => {
     .then( async (results) => {
       const characteristics = req.body.characteristics;
       const review_id = results.rows[0].id;
-      // console.log('results: ', results.rows[0].id);
-      //I passed the review ID
-      //create a char reviews record with the review_id, value and key of the char
 
       for (let key in characteristics) {
         await pool.query(`INSERT INTO characteristic_reviews (characteristic_id, review_id, value) VALUES (${key}, ${review_id}, '${characteristics[key]}')`)
       }
+      res.sendStatus(204);
 
     })
     .catch((error) => {throw error});
