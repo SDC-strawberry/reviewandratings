@@ -85,27 +85,6 @@ const report= (req, res) => {
 
 //======================================================
 //saves a review for a single product
-// const getPostReviewId = (req) => {
-//   const queryText = 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id'
-//   const queryValues = [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email]
-//   return pool
-//     .query(queryText, queryValues)
-//     .then((results) => {
-//       return results.rows[0].id
-//     })
-//     .catch((error) => {throw error});
-// };
- //breaks down the photos array into a single queries
-// async function photoPost (review_id, photos) {
-//   const postPhotos = help.updatePhotos(review_id, photos);
-//   return pool
-//     .query(postPhotos)
-//     .then((results) => {
-//       console.log('this worked?')
-//     })
-//     .catch((error) => {throw error});
-// }
-
 
 const postReview = (req, res) => {
   //need to clean up the date
@@ -117,7 +96,7 @@ const postReview = (req, res) => {
   pool
     .query(newReview)
     .then((results) => {
-      let review_id = results.rows[0].id;
+      const review_id = results.rows[0].id;
       //do a for loop with the query inside?
       if (req.body.photos.length) {
         req.body.photos.forEach(async (item) => {
@@ -126,8 +105,17 @@ const postReview = (req, res) => {
       }
       return results
     })
-    .then((results) => {
+    .then( async (results) => {
+      const characteristics = req.body.characteristics;
+      const review_id = results.rows[0].id;
       // console.log('results: ', results.rows[0].id);
+      //I passed the review ID
+      //create a char reviews record with the review_id, value and key of the char
+
+      for (let key in characteristics) {
+        await pool.query(`INSERT INTO characteristic_reviews (characteristic_id, review_id, value) VALUES (${key}, ${review_id}, '${characteristics[key]}')`)
+      }
+
     })
     .catch((error) => {throw error});
 }
