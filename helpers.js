@@ -111,10 +111,25 @@ let returnMeta = (metaObj, product_id) => {
 };
 
 
+// let updatePhotos = (review_id, urlsArray) => {
 
+//   let insertPhotoValue = '';
+
+//   urlsArray.forEach((item) => {
+//     insertPhotoValue += `(${review_id}, '${item}'),`;
+//   });
+
+//   // insertPhotoValue = insertPhotoValue.slice(0, 2);
+//   console.log('inside the helper: ', insertPhotoValue);
+
+//   let insertPhotoText = `INSERT INTO reviews_photos (review_id, url) VALUES ${insertPhotoValue}`
+//   return insertPhotoText;
+
+// };
 
 
 module.exports = {
   returnReviews,
-  returnMeta
+  returnMeta,
+
 }

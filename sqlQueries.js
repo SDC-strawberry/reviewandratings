@@ -45,7 +45,6 @@ const getMeta = (req, res) => {
   pool
     .query(getMeta)
     .then((results) => {
-      console.log('results: ', results.rows);
       let formatted = help.returnMeta(results.rows, req.query.product_id)
       res.send(formatted);
     })
@@ -86,27 +85,51 @@ const report= (req, res) => {
 
 //======================================================
 //saves a review for a single product
+// const getPostReviewId = (req) => {
+//   const queryText = 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id'
+//   const queryValues = [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email]
+//   return pool
+//     .query(queryText, queryValues)
+//     .then((results) => {
+//       return results.rows[0].id
+//     })
+//     .catch((error) => {throw error});
+// };
+ //breaks down the photos array into a single queries
+// async function photoPost (review_id, photos) {
+//   const postPhotos = help.updatePhotos(review_id, photos);
+//   return pool
+//     .query(postPhotos)
+//     .then((results) => {
+//       console.log('this worked?')
+//     })
+//     .catch((error) => {throw error});
+// }
+
+
 const postReview = (req, res) => {
-  (async () => {
-    const client = await pool.connect()
-
-    try {
-      await client.query('BEGIN')
-      const queryText = 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id'
-      const queryValues = [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email]
-      const res = await client.query(queryText, queryValues)
-
-      const insertPhotoText = 'INSERT INTO reviews_photos (review_id, url) VALUES ($1, $2)'
-      const insertPhotoValue = [res.rows[0].id, req.body.photos]
-      await client.query(insertPhotoText, insertPhotoValue)
-      await client.query('COMMIT')
-    } catch (e) {
-      await client.query('ROLLBACK')
-      throw e
-    } finally {
-      client.release()
-    }
-  })().catch((e) => console.error(e.stack))
+  //need to clean up the date
+  const newReview = {
+    text: 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness)VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id',
+    // rowMode: 'array',
+    values: [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email ]
+  }
+  pool
+    .query(newReview)
+    .then((results) => {
+      let review_id = results.rows[0].id;
+      //do a for loop with the query inside?
+      if (req.body.photos.length) {
+        req.body.photos.forEach(async (item) => {
+          await pool.query(`INSERT INTO reviews_photos (review_id, url) VALUES (${review_id}, '${item}')`)
+        })
+      }
+      return results
+    })
+    .then((results) => {
+      // console.log('results: ', results.rows[0].id);
+    })
+    .catch((error) => {throw error});
 }
 
 module.exports = {
@@ -147,3 +170,50 @@ module.exports = {
   //   })
   //   .query(test)
   //   .catch((error) => {throw error});
+
+
+//tried from node-postgres documentation - need to break it down for arrays and the chars
+//   const client = await pool.connect()
+
+//   try {
+//     await client.query('BEGIN')
+//     const queryText = 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness) VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id'
+//     const queryValues = [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email]
+//     const res = await client.query(queryText, queryValues)
+
+//     // const insertPhotoText = 'INSERT INTO reviews_photos (review_id, url) VALUES ($1, $2)'
+//     // const insertPhotoValue = [res.rows[0].id, req.body.photos]
+//     // await client.query(insertPhotoText, insertPhotoValue)
+//     if (req.body.photos.length) {
+//       await photoPost(res.rows[0].id, req.body.photos)
+//     }
+
+
+//     await client.query('COMMIT')
+//   } catch (e) {
+//     await client.query('ROLLBACK')
+//     throw e
+//   } finally {
+//     client.release()
+//   }
+// })().catch((e) => console.error(e.stack))
+// res.sendStatus(204)
+
+
+
+// (async () => {
+//   let review_id;
+//   try {
+//     review_id = await getPostReviewId(req);
+//   } catch (error) {throw error};
+
+//   if (req.body.photos.length) {
+//     try{
+//       await photoPost(review_id, req.body.photos)
+//     } catch (error) {
+//       console.log("happening at photos:", error);
+//     };
+//   }
+
+// })()
+// .catch((e) => console.error(e.stack))
