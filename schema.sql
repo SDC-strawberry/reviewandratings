@@ -98,7 +98,7 @@ CREATE TABLE characteristics (
 
 ALTER TABLE reviews ADD FOREIGN KEY (product_id) REFERENCES product (id);
 ALTER TABLE reviews_photos ADD FOREIGN KEY (review_id) REFERENCES reviews (id);
-ALTER TABLE characteristic_reviews ADD FOREIGN KEY (characteristic_id) REFERENCES characteristics (id);
+-- ALTER TABLE characteristic_reviews ADD FOREIGN KEY (characteristic_id) REFERENCES characteristics (id); do I actually need this?
 ALTER TABLE characteristic_reviews ADD FOREIGN KEY (review_id) REFERENCES reviews (id);
 ALTER TABLE characteristics ADD FOREIGN KEY (product_id) REFERENCES product (id);
 
