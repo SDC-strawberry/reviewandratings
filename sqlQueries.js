@@ -88,10 +88,11 @@ const report= (req, res) => {
 
 const postReview = (req, res) => {
   //need to clean up the date
+  const date = new Date().toISOString();
   const newReview = {
-    text: 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness)VALUES ($1, $2, DEFAULT, $3, $4, $5, false, $6, $7, null, 0 ) RETURNING id',
+    text: 'INSERT INTO reviews (product_id, rating, date, summary, body, recommend, reported, reviewer_name, reviewer_email, response, helpfulness)VALUES ($1, $2, $3, $4, $5, $6, false, $7, $8, null, 0 ) RETURNING id',
     // rowMode: 'array',
-    values: [req.body.product_id, req.body.ratings, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email ]
+    values: [req.body.product_id, req.body.ratings, date, req.body.summary, req.body.body, req.body.recommend, req.body.name, req.body.email ]
   }
   pool
     .query(newReview)
