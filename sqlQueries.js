@@ -26,7 +26,7 @@ const getReviews = (req, res) => {
     .query(getReviews)
     .then((results) => {
       let formatted = help.returnReviews(results.rows, req.query.product_id, req.query.page || 0, req.query.count || 5)
-      res.send(formatted);
+      res.status(200).send(formatted);
     })
     .catch((error) => {throw error});
 }
